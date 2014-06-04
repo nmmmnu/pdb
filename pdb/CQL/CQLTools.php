@@ -75,7 +75,7 @@ class CQLTools{
 
 	static function transformCassandraResults($data){
 		$array = array();
-print_r($data);
+
 		foreach($data->rows as $r){
 			$row = array();
 

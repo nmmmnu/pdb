@@ -9,8 +9,8 @@ use pdb\SQL,
 use pfc\Loggable,
 	pfc\Logger;
 
-use pfc\CacheAdapter;
-use pfc\Serializer;
+use pfc\CacheAdapter\CacheAdapter;
+use pfc\Serializer\Serializer;
 
 
 /**

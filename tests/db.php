@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 $conn = "pdosqlite";
 $conn = "pdomysql";
 $conn = "mysqli";
-//$conn = "cql";
+$conn = "cql";
 
 
 if ($conn == "pdosqlite"){

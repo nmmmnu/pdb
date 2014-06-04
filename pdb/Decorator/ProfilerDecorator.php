@@ -1,7 +1,8 @@
 <?
-namespace pfc\SQL;
+namespace pdb\Decorator;
 
-use pfc\SQL;
+use pdb\SQL,
+	pdb\Tools;
 
 use pfc\Loggable,
 	pfc\Logger;
@@ -14,7 +15,6 @@ use pfc\Profiler;
  *
  */
 class ProfilerDecorator implements SQL{
-	use TraitEscape;
 	use Loggable;
 
 
@@ -63,7 +63,7 @@ class ProfilerDecorator implements SQL{
 
 	function query($sql, array $params, $primaryKey = null){
 		$originalSQL = $sql;
-		$sql = $this->escapeQuery($sql, $params);
+		$sql = Tools::escapeQuery($this, $sql, $params);
 
 		$this->_profiler->stop("query start", $sql);
 		$result = $this->_sqlAdapter->query($originalSQL, $params, $primaryKey);
@@ -79,6 +79,20 @@ class ProfilerDecorator implements SQL{
 		$this->logDebug($message);
 
 		return $result;
+	}
+
+	// =======================
+
+	static function test(){
+		$profiler = new Profiler();
+
+		$logger = new \pfc\Logger();
+		$logger->addOutput(new \pfc\OutputAdapter\Console());
+
+		$db = new self( \pdb\UnitTests\MockTests::factory(),  $profiler, $logger);
+		\pdb\UnitTests\MockTests::test( $db );
+
+		print_r($profiler->getData());
 	}
 }
 

@@ -1,18 +1,15 @@
 <?
-namespace pfc\SQL;
+namespace pdb\Decorator;
 
-use pfc\SQL;
-use pfc\SQLException;
-
+use pdb\SQL,
+	pdb\Tools,
+	pdb\SQLException;
 
 /**
  * Decorator that uses throw exception in case of SQL error
  *
  */
 class ExceptionDecorator implements SQL{
-	use TraitEscape;
-
-
 	private $_sqlAdapter;
 
 
@@ -60,7 +57,7 @@ class ExceptionDecorator implements SQL{
 
 	function query($sql, array $params, $primaryKey = null){
 		$originalSQL = $sql;
-		$sql = $this->escapeQuery($sql, $params);
+		$sql = Tools::escapeQuery($this, $sql, $params);
 
 		return $this->decorate(
 			$this->_sqlAdapter->query($originalSQL, $params, $primaryKey),
@@ -79,6 +76,13 @@ class ExceptionDecorator implements SQL{
 		$name = $this->_sqlAdapter->getName();
 
 		throw new SQLException("SQL Exception in $name::$method()");
+	}
+
+	// =======================
+
+	static function test(){
+		$db = new self( \pdb\UnitTests\MockTests::factory() );
+		\pdb\UnitTests\MockTests::test( $db );
 	}
 }
 

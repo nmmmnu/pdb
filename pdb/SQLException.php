@@ -1,5 +1,5 @@
 <?
-namespace pfc;
+namespace pdb;
 
 class SQLException extends \Exception{
 }

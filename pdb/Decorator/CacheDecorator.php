@@ -1,8 +1,10 @@
 <?
-namespace pfc\SQL;
+namespace pdb\Decorator;
 
-use pfc\SQL,
-	pfc\SQLResult;
+use pdb\SQL,
+	pdb\SQLResult,
+	pdb\ArrayResult,
+	pdb\Tools;
 
 use pfc\Loggable,
 	pfc\Logger;
@@ -10,13 +12,13 @@ use pfc\Loggable,
 use pfc\CacheAdapter;
 use pfc\Serializer;
 
+
 /**
  * Decorator that caches the SQL using CacheAdapter and Serializer
  *
  */
 class CacheDecorator implements SQL{
 	use Loggable;
-	use TraitEscape;
 
 
 	private $_sqlAdapter;
@@ -67,7 +69,7 @@ class CacheDecorator implements SQL{
 
 	function query($sql, array $params, $primaryKey = null){
 		$originalSQL = $sql;
-		$sql = $this->escapeQuery($sql, $params);
+		$sql = Tools::escapeQuery($this, $sql, $params);
 		// load from cache
 		$serializedData = $this->_cacheAdapter->load($sql);
 
@@ -106,6 +108,25 @@ class CacheDecorator implements SQL{
 		return new SQLResult(
 			new ArrayResult($arrayData, $result->affectedRows(), $result->insertID()),
 			$primaryKey);
+	}
+
+
+	// =======================
+
+	static function test(){
+		$cacheAdapter = new \pfc\CacheAdapter\Shm("CacheDecorator_");
+		$cacheAdapter->setTTL(10);
+
+
+		$serializer = new \pfc\Serializer\JSON();
+
+
+		$logger = new \pfc\Logger();
+		$logger->addOutput(new \pfc\OutputAdapter\Console());
+
+
+		$db = new self( \pdb\UnitTests\MockTests::factory(),  $cacheAdapter, $serializer, $logger);
+		\pdb\UnitTests\MockTests::test( $db );
 	}
 }
 

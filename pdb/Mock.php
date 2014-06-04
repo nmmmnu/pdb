@@ -33,12 +33,12 @@ class Mock implements SQL{
 
 
 	function open(){
-		// Connected
+		return true;
 	}
 
 
 	function close(){
-		// Disconnected
+		return true;
 	}
 
 
@@ -51,6 +51,12 @@ class Mock implements SQL{
 		return new SQLResult(
 			new ArrayResult($this->_data),
 			$primaryKey);
+	}
+
+	// =======================
+
+	static function test(){
+		\pdb\UnitTests\MockTests::test( UnitTests\MockTests::factory() );
 	}
 }
 

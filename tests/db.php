@@ -6,9 +6,9 @@ error_reporting(E_ALL);
 
 
 $conn = "pdosqlite";
-$conn = "pdomysql";
-$conn = "mysqli";
-$conn = "cql";
+//$conn = "pdomysql";
+//$conn = "mysqli";
+//$conn = "cql";
 
 
 if ($conn == "pdosqlite"){
@@ -60,7 +60,7 @@ if ($conn == "pdosqlite"){
 }else if ($conn == "cql"){
 	// Cassandra
 
-	require_once __DIR__ . "/../__cassandra_autoload.php";
+	require_once __DIR__ . "/../pdb/__cassandra_autoload.php";
 
 	$connection = array(
 		"hosts"		=> array(

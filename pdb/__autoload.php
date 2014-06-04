@@ -8,7 +8,7 @@ spl_autoload_register(function($class){
 	if ($parts[0] != __NAMESPACE__)
 		return;
 
-	//unset($parts[0]);
+	unset($parts[0]);
 
 	$file = implode("/", $parts) . ".php";
 

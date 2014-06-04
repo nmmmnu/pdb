@@ -1,7 +1,7 @@
 #!/usr/local/bin/php
 <?
 namespace tests;
-require_once __DIR__ . "/../__autoload.php";
+require_once __DIR__ . "/../pdb/__autoload.php";
 
 
 require "db.php";

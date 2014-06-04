@@ -6,6 +6,7 @@ require_once __DIR__ . "/../../pfc/pfc/__autoload.php";
 pdb\Mock::test();
 
 pdb\Decorator\ExceptionDecorator::test();
+pdb\Decorator\MultiDecorator::test();
 pdb\Decorator\ProfilerDecorator::test();
 pdb\Decorator\CacheDecorator::test();
 

@@ -2,14 +2,16 @@
 namespace pdb\UnitTests;
 
 class MockTests{
-	static function factory(){
-		return new \pdb\Mock(
-			array(
+	static function factory($array = false){
+		if ($array == false){
+			$array = array(
 				array("id" => 1, "city" => "London"	),
 				array("id" => 2, "city" => "Bonn"	),
 				array("id" => 3, "city" => "Boston"	),
-			)
-		);
+			);
+		}
+		
+		return new \pdb\Mock($array);
 	}
 
 	static function test(\pdb\SQL $db){

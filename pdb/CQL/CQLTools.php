@@ -38,9 +38,6 @@ class CQLTools{
 
 	static function decode($type, $data){
 		switch(self::fixType($type)){
-			case "Int32Type" :
-				return current(unpack('l', strrev($data)));
-
 			case "DecimalType" :
 				$power = unpack('N', substr($data,  0,4));
 				$power = $power[1];
@@ -49,6 +46,7 @@ class CQLTools{
 
 				return $base * pow(10, - $power);
 
+			case "Int32Type" :
 			case "LongType" :
 				return self::decodeInteger($data);
 

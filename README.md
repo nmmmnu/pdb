@@ -197,7 +197,7 @@ $replicas[] = new \pdb\MySQLi\MySQLi($connection);
 $db = new \pdb\Decorator\ExceptionDecorator($replicaDB);
 
 // then send insert / update / delete to the master
-$master->quesy("update users set logged = now() where id = %d", array(1234) );
+$master->query("update users set logged = now() where id = %d", array(1234) );
 
 // and select from slaves
 $result = $db->query("select * from users where id = %d", array(1234) );

@@ -6,9 +6,9 @@ error_reporting(E_ALL);
 
 
 $conn = "pdosqlite";
-$conn = "pdomysql";
-$conn = "mysqli";
-$conn = "cql";
+//$conn = "pdomysql";
+//$conn = "mysqli";
+//$conn = "cql";
 
 
 if ($conn == "pdosqlite"){
@@ -67,8 +67,7 @@ if ($conn == "pdosqlite"){
 					"office-server.cosm:9160"	,
 					"office-server.com:9160"	,
 				),
-		"keyspace"	=> "niki"				,
-	//	"primary_key"	=> "_PK_"
+		"keyspace"	=> "niki"
 	);
 
 	$real_db = new \pdb\CQL\CQL($connection);

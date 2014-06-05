@@ -60,10 +60,10 @@ class SQLResult implements \Iterator{
 	}
 
 
-	function fetchArray($primaryKey = null){
+	function fetchArray($primaryKey = false){
 		$array = array();
 		foreach($this as $row){
-			if ($primaryKey && isset($row[$primaryKey]))
+			if ($primaryKey !== false && isset($row[$primaryKey]))
 				$array[$row[$primaryKey]] = $row;
 			else
 				$array[] = $row;
@@ -133,10 +133,21 @@ class SQLResult implements \Iterator{
 			array("name" => "niki", "age" => 22),
 		);
 
-		$sr = new self(new SQL\ArrayResult($data));
+
+		$sr = new self(new ArrayResult($data));
+		assert($sr->fetchArray() == $data );
+		assert($sr->affectedRows() == 1 );
+
+
+		$sr = new self(new ArrayResult($data));
+		assert($sr->fetch() == $data[0] );
+
+
+		$sr = new self(new ArrayResult($data));
 		assert($sr->fetchField() == "niki");
 
-		$sr = new self(new SQL\ArrayResult($data));
+
+		$sr = new self(new ArrayResult($data));
 		assert($sr->fetchField("age") == 22);
 	}
 }

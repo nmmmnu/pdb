@@ -6,6 +6,7 @@ require_once __DIR__ . "/../../pfc/pfc/__autoload.php";
 pdb\pdb_assert_setup();
 
 pdb\Mock::test();
+pdb\SQLResult::test();
 
 pdb\Decorator\ExceptionDecorator::test();
 pdb\Decorator\MultiDecorator::test();

@@ -5,12 +5,20 @@ use pdb\SQL,
 	pdb\Tools;
 
 
+use pfc\Loggable,
+	pfc\Logger;
+
+
 /**
  * Decorator that uses Profiler to profile the queries
  *
  */
 class MultiDecorator implements SQL{
+	use Loggable;
+
+
 	private $_sqlAdapter = null;
+	private $_sqlAdaptersKeys;
 	private $_sqlAdapters;
 
 
@@ -20,18 +28,20 @@ class MultiDecorator implements SQL{
 	 * @param array $sqlAdapter array of SQL adapters
 	 *
 	 */
-	function __construct(array $sqlAdapters){
+	function __construct(array $sqlAdapters, Logger $logger = null){
 		$array = array();
-		foreach($sqlAdapters as $adapter)
+		foreach($sqlAdapters as $k => $adapter)
 			if ($adapter instanceof SQL)
-				$array[] = $adapter;
+				$array[$k] = $adapter;
 
 		if (count($array) == 0)
 			throw new SQLException("You must provide at least one SQL adapter");
 
-		shuffle($array);
 
-		$this->_sqlAdapters = $array;
+		$this->_sqlAdapters     = $array;
+		$this->_sqlAdaptersKeys = array_keys($array);
+		
+		$this->setLogger($logger);
 	}
 
 
@@ -49,11 +59,17 @@ class MultiDecorator implements SQL{
 		if ($this->_sqlAdapter)
 			return true;
 
-		foreach($this->_sqlAdapters as $adapter){
+		shuffle($this->_sqlAdaptersKeys);
+
+		foreach($this->_sqlAdaptersKeys as $k){
+			$adapter = $this->_sqlAdapters[$k];
+			
 			$result = $adapter->open();
 
 			if ($result){
 				$this->_sqlAdapter = $adapter;
+
+				$this->logDebug("Connect to SQL adapter '$k'.");
 
 				return true;
 			}
@@ -107,20 +123,21 @@ class MultiDecorator implements SQL{
 
 
 	static function test(){
-		$adapters = array(
-			\pdb\UnitTests\MockTests::factory( array("id" => 10, "city" => "server0" ) ),
-			\pdb\UnitTests\MockTests::factory( array("id" => 10, "city" => "server1" ) ),
-			\pdb\UnitTests\MockTests::factory( array("id" => 10, "city" => "server2" ) )
-		);
+		$adapters = array();
+		
+		for($i = 0; $i < 10; $i++)
+			$adapters[] = \pdb\UnitTests\MockTests::factory();
+
+
+		$logger = new \pfc\Logger();
+		$logger->addOutput(new \pfc\OutputAdapter\Console());
 
 		$db = new self($adapters);
-		\pdb\UnitTests\MockTests::test( $db, 4 );
+		\pdb\UnitTests\MockTests::test( $db);
 
 
 		$result = $db->query("select * from bla", array(), "id");
 		$result = $result->fetchArray();
-
- 		printf("Connected to server %s\n", $result[10]["city"]);
 	}
 }
 

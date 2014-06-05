@@ -15,6 +15,10 @@ PHP Database Abstraction Layer
 ~~~php
 require_once "./pdb/__autoload.php";
 
+$connection = array(
+	"connection_string" => "sqlite:database.sqlite3"
+);
+
 $db = new \pdb\PDO\PDO($connection);
 
 $result = $db->query("
@@ -53,6 +57,83 @@ There required additional clases from PFC library
 
 - Decorator\CacheDecorator - cache adapter
 - Decorator\ProfilerDecorator - prints profiling information
+
+# Examples
+
+## PDO\PDO
+
+~~~php
+$connection = array(
+	// PDO connection string
+	"connection_string"	=> "mysql:unix_socket=$socket;dbname=test",
+	"user"			=> "user",
+	"password"		=> "secret",
+	// Optional SQL command
+	"init_command"		=> "set names utf8"
+);
+
+$db = new \pdb\PDO\PDO($connection);
+~~~
+
+## PDO\PDO
+
+~~~php
+$connection = array(
+	"host"			=> "localhost",
+	"port"			=> 3306,
+	"database"		=> "test",
+	"user"			=> "user",
+	"password"		=> "secret",
+
+	// socket to connect (remove host and port in this case)
+	"socket"		=> null,
+
+	// Optional SQL command
+	"init_command"		=> "set names utf8"
+);
+
+$db = new \pdb\MySQLi\MySQLi($connection);
+~~~
+
+## CQL\CQL
+
+Please note this adapter is experimental.
+
+Currently supported data types:
+
+- DecimalType - Works correctly on 32bit machines, but might give unexpected results, if number size is bigger than 64bit.
+
+- Int32Type
+
+- LongType - Works correctly on 32bit machines
+
+- UUIDType
+
+- BooleanType - return it as 'true' / 'false' strings
+
+- FloatType
+
+- AsciiType
+
+- UTF8Type
+
+~~~php
+// you need to open this file and set $THRIFT_PATH
+require_once __DIR__ . "/../pdb/__cassandra_autoload.php";
+
+$connection = array(
+	// Cassandra hosts
+	"hosts"		=> array(
+				"office-server.cosm:9160"	,
+				"office-server.com:9160"	,
+			),
+
+	// Cassandra keyspace (equivalent to database in RDBMS world)
+	"keyspace"	=> "niki"				,
+);
+
+$db = new \pdb\CQL\CQL($connection);
+~~~
 
 # [eof]
 

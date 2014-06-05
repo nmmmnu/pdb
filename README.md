@@ -101,24 +101,19 @@ Please note this adapter is experimental.
 
 Currently supported data types:
 
-- DecimalType - Works correctly on 32bit machines, but might give unexpected results, if number size is bigger than 64bit.
-
+- AsciiType
+- UTF8Type
+- DecimalType - Might give unexpected results, if number size is bigger than 64bit.
 - Int32Type
-
-- LongType - Works correctly on 32bit machines
-
+- LongType
+- FloatType
+- BooleanType - return it as 'true' / 'false' strings
 - UUIDType
 
-- BooleanType - return it as 'true' / 'false' strings
-
-- FloatType
-
-- AsciiType
-
-- UTF8Type
+All 64bit types are supported and works OK on 32bit machines.
 
 ~~~php
-// you need to open this file and set $THRIFT_PATH
+// you need to open this file and set $THRIFT_PATH accordingly.
 require_once __DIR__ . "/../pdb/__cassandra_autoload.php";
 
 $connection = array(

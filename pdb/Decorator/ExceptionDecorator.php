@@ -55,12 +55,12 @@ class ExceptionDecorator implements SQL{
 	}
 
 
-	function query($sql, array $params, $primaryKey = null){
+	function query($sql, array $params){
 		$originalSQL = $sql;
 		$sql = Tools::escapeQuery($this, $sql, $params);
 
 		return $this->decorate(
-			$this->_sqlAdapter->query($originalSQL, $params, $primaryKey),
+			$this->_sqlAdapter->query($originalSQL, $params),
 			__METHOD__,
 			$sql
 		);

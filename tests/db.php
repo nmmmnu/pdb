@@ -6,9 +6,9 @@ error_reporting(E_ALL);
 
 
 $conn = "pdosqlite";
-//$conn = "pdomysql";
-//$conn = "mysqli";
-//$conn = "cql";
+$conn = "pdomysql";
+$conn = "mysqli";
+$conn = "cql";
 
 
 if ($conn == "pdosqlite"){

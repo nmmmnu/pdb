@@ -1,4 +1,4 @@
-#php_db
+# pdb
 
 PHP Database Abstraction Layer
 
@@ -10,7 +10,7 @@ PHP Database Abstraction Layer
 - No need of metadata (column names) support
 
 
-## Workflow
+## Simple workflow
 
 ~~~php
 require_once "./pdb/__autoload.php";
@@ -45,8 +45,11 @@ foreach($results as $row){
 ## Decorators
 
 - Decorator\ExceptionDecorator - make any adapter throw exceptions instead of return true / false.
+- Decorator\MultiDecorator - adapter for connection to read only replicas
 
 ## PFC Decorators
+
+There required additional clases from PFC library
 
 - Decorator\CacheDecorator - cache adapter
 - Decorator\ProfilerDecorator - prints profiling information

@@ -82,10 +82,10 @@ $sql = "select * from ppl";
 
 $rows = $db->query($sql, array() );
 
-print_r(iterator_to_array($rows));
+print_r($rows->fetchArray());
 
-$rows = $db->query($sql, array(), "name");
-print_r(iterator_to_array($rows));
+$rows = $db->query($sql, array());
+print_r($rows->fetchArray("name"));
 
 
 // close

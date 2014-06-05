@@ -83,7 +83,7 @@ class PDO implements SQL{
 	}
 
 
-	function query($sql, array $params, $primaryKey = null){
+	function query($sql, array $params){
 		if ($this->open() == false)
 			return false;
 
@@ -98,8 +98,8 @@ class PDO implements SQL{
 		$lastID = $this->_pdo->lastInsertId();
 
 		return new SQLResult(
-			new PDOResult($result, $lastID),
-			$primaryKey);
+			new PDOResult($result, $lastID)
+			);
 	}
 }
 

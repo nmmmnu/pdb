@@ -2,24 +2,25 @@
 namespace pdb\UnitTests;
 
 class MockTests{
-	static function factory($array = false){
-		if ($array == false){
-			$array = array(
-				array("id" => 1, "city" => "London"	),
-				array("id" => 2, "city" => "Bonn"	),
-				array("id" => 3, "city" => "Boston"	),
-			);
-		}
-		
+	static function factory($row = false){
+		$array = array(
+			array("id" => 1, "city" => "London"	),
+			array("id" => 2, "city" => "Bonn"	),
+			array("id" => 3, "city" => "Boston"	),
+		);
+
+		if ($row)
+			$array[] = $row;
+
 		return new \pdb\Mock($array);
 	}
 
-	static function test(\pdb\SQL $db){
-		$result = $db->query("select * from bla", array(), "city");
+	static function test(\pdb\SQL $db, $affectedRows = 3){
+		$result = $db->query("select * from bla", array());
 
-		assert($result->affectedRows() == 3);
+		assert($result->affectedRows() == $affectedRows);
 
-		$res = iterator_to_array($result);
+		$res = $result->fetchArray("city");
 
 		//echo "You should see SQL result as array:\n";
 		//print_r($res);
@@ -33,9 +34,9 @@ class MockTests{
 
 		$result = $db->query("select * from bla", array() );
 
-		assert($result->affectedRows() == 3);
+		assert($result->affectedRows() == $affectedRows);
 
-		$res = iterator_to_array($result);
+		$res = $result->fetchArray();
 
 		//echo "You should see SQL result as array:\n";
 		//print_r($res);

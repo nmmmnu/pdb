@@ -9,8 +9,6 @@ namespace pdb;
 class SQLResult implements \Iterator{
 	private $_result;
 
-	private $_primaryKey;
-
 	private $_row;
 	private $_rowID;
 
@@ -19,14 +17,11 @@ class SQLResult implements \Iterator{
 	 * constructor
 	 *
 	 * @param Iterator $iterator iterator with the row data
-	 * @param string $primaryKey "primary key" for the array keys
 	 * @param int $affectedRows affected rows value for affectedRows()
 	 * @param int $insertID last insert id for insertID()
 	 */
-	function __construct(SQLIntermediateResult $result, $primaryKey = false){
+	function __construct(SQLIntermediateResult $result){
 		$this->_result		= $result;
-
-		$this->_primaryKey	= $primaryKey;
 
 		$this->_rowID		= 0;
 	}
@@ -65,13 +60,13 @@ class SQLResult implements \Iterator{
 	}
 
 
-	function fetchArray($keys = true){
+	function fetchArray($primaryKey = null){
 		$array = array();
-		foreach($this as $k => $v){
-			if ($keys)
-				$array[$k] = $v;
+		foreach($this as $row){
+			if ($primaryKey && isset($row[$primaryKey]))
+				$array[$row[$primaryKey]] = $row;
 			else
-				$array[] = $v;
+				$array[] = $row;
 		}
 
 		return $array;
@@ -110,11 +105,7 @@ class SQLResult implements \Iterator{
 			$this->next();
 		}
 
-		if (! $this->_primaryKey )
-			return $this->_rowID - 1;
-
-		if ( isset($this->_row[$this->_primaryKey] ))
-			return $this->_row[$this->_primaryKey];
+		return $this->_rowID - 1;
 	}
 
 

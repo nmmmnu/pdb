@@ -67,7 +67,7 @@ class CacheDecorator implements SQL{
 	}
 
 
-	function query($sql, array $params, $primaryKey = null){
+	function query($sql, array $params){
 		$originalSQL = $sql;
 		$sql = Tools::escapeQuery($this, $sql, $params);
 		// load from cache
@@ -82,15 +82,15 @@ class CacheDecorator implements SQL{
 				$this->logDebug("Cache hit...");
 
 				return new SQLResult(
-					new ArrayResult($arrayData),
-					$primaryKey);
+					new ArrayResult($arrayData)
+					);
 			}
 		}
 
 		$this->logDebug("Perform the query...");
 
 		// perform the query
-		$result = $this->_sqlAdapter->query($originalSQL, $params, $primaryKey);
+		$result = $this->_sqlAdapter->query($originalSQL, $params);
 
 		if ($result === false)
 			return false;
@@ -106,8 +106,8 @@ class CacheDecorator implements SQL{
 		// the iterator can not be rewind.
 		// this is why we use the SQLMockResult again.
 		return new SQLResult(
-			new ArrayResult($arrayData, $result->affectedRows(), $result->insertID()),
-			$primaryKey);
+			new ArrayResult($arrayData, $result->affectedRows(), $result->insertID())
+			);
 	}
 
 

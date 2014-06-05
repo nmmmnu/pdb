@@ -55,6 +55,6 @@ interface SQL{
 	 * @param string $primaryKey "primary key" to be used later with the iterators
 	 * @return SQLResult
 	 */
-	function query($sql, array $params, $primaryKey = null);
+	function query($sql, array $params);
 }
 

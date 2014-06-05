@@ -61,12 +61,12 @@ class ProfilerDecorator implements SQL{
 	}
 
 
-	function query($sql, array $params, $primaryKey = null){
+	function query($sql, array $params){
 		$originalSQL = $sql;
 		$sql = Tools::escapeQuery($this, $sql, $params);
 
 		$this->_profiler->stop("query start", $sql);
-		$result = $this->_sqlAdapter->query($originalSQL, $params, $primaryKey);
+		$result = $this->_sqlAdapter->query($originalSQL, $params);
 		$m = $this->_profiler->stop("query end", $sql);
 
 		if ($result === false){

@@ -95,7 +95,7 @@ class MySQLi implements SQL{
 	}
 
 
-	function query($sql, array $params, $primaryKey = null){
+	function query($sql, array $params){
 		if ($this->open() == false)
 			return false;
 
@@ -109,7 +109,6 @@ class MySQLi implements SQL{
 
 		if ($result === true){
 			// query with no results
-			// $primaryKey not really need too
 			return new SQLResult(
 				new EmptyResult(
 					$this->_link->affected_rows,
@@ -120,8 +119,8 @@ class MySQLi implements SQL{
 
 		// result set
 		return new SQLResult(
-			new MySQLiResult($result),
-			$primaryKey);
+			new MySQLiResult($result)
+			);
 	}
 }
 

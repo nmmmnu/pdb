@@ -99,7 +99,7 @@ class CQL implements SQL{
 	}
 
 
-	function query($sql, array $params, $primaryKey = null){
+	function query($sql, array $params){
 		if ($this->open() == false)
 			return false;
 
@@ -119,15 +119,15 @@ class CQL implements SQL{
 
 
 			return new SQLResult(
-				new ArrayResult($array),
-				$primaryKey);
+				new ArrayResult($array)
+				);
 		}
 
 
 		// insert, update, delete
 		return new SQLResult(
-			new EmptyResult(),
-			$primaryKey);
+			new EmptyResult()
+			);
 	}
 
 

@@ -57,20 +57,6 @@ if ($conn == "pdosqlite"){
 	);
 
 	$real_db = new \pdb\MySQLi\MySQLi($connection);
-}else if ($conn == "cql"){
-	// Cassandra
-
-	require_once __DIR__ . "/../pdb/__cassandra_autoload.php";
-
-	$connection = array(
-		"hosts"		=> array(
-					"office-server.cosm:9160"	,
-					"office-server.com:9160"	,
-				),
-		"keyspace"	=> "niki"
-	);
-
-	$real_db = new \pdb\CQL\CQL($connection);
 }
 
 

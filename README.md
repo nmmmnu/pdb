@@ -54,13 +54,13 @@ foreach($results as $row){
 ## Decorators
 
 - Decorator\ExceptionDecorator - make any adapter throw exceptions instead of return true / false.
-- Decorator\MultiDecorator - adapter for connection to read only replicas
 
 
 ## PFC Decorators
 
 There required additional clases from PFC library
 
+- Decorator\MultiDecorator - adapter for connection to read only replicas
 - Decorator\CacheDecorator - cache adapter
 - Decorator\ProfilerDecorator - prints profiling information
 
@@ -180,6 +180,10 @@ $connection = array(
 );
 
 
+// For debug purposes, you can create a Logger.
+// we will skip this step
+
+
 $connection["host"] = "192.168.0.100";
 $master = new \pdb\MySQLi\MySQLi($connection);
 
@@ -194,7 +198,7 @@ $connection["host"] = "192.168.0.103";
 $replicas[] = new \pdb\MySQLi\MySQLi($connection);
 
 // 3 objects are created, but there are no open connection yet.
-$db = new \pdb\Decorator\ExceptionDecorator($replicaDB);
+$db = new \pdb\Decorator\ExceptionDecorator($replicaDB /* , $logger */);
 
 // then send insert / update / delete to the master
 $master->query("update users set logged = now() where id = %d", array(1234) );
@@ -220,7 +224,6 @@ $serializer = new \pfc\Serializer\JSON();
 
 // For debug purposes, you can create a Logger.
 // we will skip this step
-$logger = null;
 
 // Now we create normal PDO\PDO or different SQL adapter
 $connection = array(
@@ -230,7 +233,8 @@ $connection = array(
 $realdb = new \pdb\PDO\PDO($connection);
 
 // Then attach $realdb to Decorator\CacheDecorator
-$db = new \pdb\Decorator\CacheDecorator($realdb, $cacheAdapter, $serializer, $logger);
+$db = new \pdb\Decorator\CacheDecorator($realdb, 
+			$cacheAdapter, $serializer /* , $logger */);
 
 // using $db will lead to cached results
 // using $realdb will query the same connection, without cache.
@@ -257,7 +261,7 @@ $connection = array(
 $realdb = new \pdb\PDO\PDO($connection);
 
 // Then attach $realdb to Decorator\ProfilerDecorator
-$db = new \pdb\Decorator\CacheDecorator($realdb, $cacheAdapter, $serializer, $logger);
+$db = new \pdb\Decorator\ProfilerDecorator($realdb, $profiler, $logger);
 
 // Use $db here. Execution times will be written to the log.
 
@@ -314,24 +318,17 @@ $cacheAdapter->setTTL(24 * 3600); // cache for 24h
 // following class will serialize in JSON format
 $serializer = new \pfc\Serializer\JSON();
 
-// For debug purposes, you can create a Logger.
-// we will skip this step
-$logger = null;
-
-// Now we create normal PDO\PDO or different SQL adapter
-$connection = array(
-	"connection_string" => "sqlite:database.sqlite3"
-);
 
 // Then attach $multidb to Decorator\CacheDecorator
-$cachedb = new \pdb\Decorator\CacheDecorator($multidb, $cacheAdapter, $serializer, $logger);
+$cachedb = new \pdb\Decorator\CacheDecorator($multidb, 
+			$cacheAdapter, $serializer);
 
 
 // ================================
 // STEP 3
 // ================================
 
-// Then attach $realdb to Decorator\ExceptionDecorator
+// Then attach $cachedb to Decorator\ExceptionDecorator
 $db = new \pdb\Decorator\ExceptionDecorator($cachedb);
 
 

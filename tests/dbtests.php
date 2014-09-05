@@ -8,66 +8,24 @@ require "db.php";
 
 
 // prepare data, don't throw exceptions
-if ($conn == "cql"){
-	$create_statement1 = "
-		create table ppl(
-			id int primary key,
-			name text,
-			age int,
-			tt uuid,
-			balance float,
-			balance2 bigint,
-			balance3 decimal,
-			enabled boolean
-		)
-	";
-	$create_statement = false;
+$create_statement = "
+	create table ppl(
+		id int primary key,
+		name varchar(20),
+		age int
+	)
+";
 
-	$truncate_statement = false;
+$truncate_statement = "
+	delete from ppl
+";
 
-	$insert_statement = "
-		insert into ppl(
-			id,
-			name,
-			age,
-			tt,
-			balance,
-			balance2,
-			balance3,
-			enabled
-		)values(
-			%d,
-			'%s',
-			%d,
-			uuid(),
-			3.1416,
-			1234,
-			12.34567890,
-			true
-		)
-	";
-}else{
-	$create_statement = "
-		create table ppl(
-			id int primary key,
-			name varchar(20),
-			age int
-		)
-	";
-
-	$truncate_statement = "
-		delete from ppl
-	";
-
-	$insert_statement = "insert into ppl(id, name, age)values(%s, '%s', %s)";
-}
+$insert_statement = "insert into ppl(id, name, age)values(%d, '%s', %d)";
 
 
-if ($create_statement)
-	$db->query($create_statement, array());
+$db->query($create_statement, array());
 
-if ($truncate_statement)
-	$db->query($truncate_statement, array());
+$db->query($truncate_statement, array());
 
 
 $db->query($insert_statement, array(1, 'Ivan',   22) );
